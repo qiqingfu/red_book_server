@@ -1,17 +1,18 @@
 {
   "name": "red_book_server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "red_book_server",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG=* nodemon bin/www"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qiqingfu/red_book_server.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["koa"],
+  "author": "qiqingfu",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/qiqingfu/red_book_server/issues"
@@ -28,6 +29,8 @@
     }
   },
   "dependencies": {
-    "koa": "^2.11.0"
+    "debug": "^4.1.1",
+    "koa": "^2.11.0",
+    "lowdb": "^1.0.0"
   }
 }

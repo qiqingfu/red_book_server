@@ -11,4 +11,4 @@ app.use(async ctx => {
   ctx.body = 'red_book_server'
 });
 
-app.listen(3001);
+module.exports = app;
