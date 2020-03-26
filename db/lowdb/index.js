@@ -3,15 +3,15 @@
  * @date 2020-03-25 14:24
  */
 
-const low = require('lowdb');
-const path = require('path');
-const FileSync = require('lowdb/adapters/FileSync');
+const low = require("lowdb");
+const path = require("path");
+const FileSync = require("lowdb/adapters/FileSync");
 
-const adapter = new FileSync(path.join(__dirname, 'db.json'));
+const adapter = new FileSync(path.join(__dirname, "db.json"));
 const lowdb = low(adapter);
 
-if (!lowdb.has('mysql').value()) {
-  lowdb.set('mysql', {}).write();
+if (!lowdb.has("mysql").value()) {
+  lowdb.set("mysql", {}).write();
 }
 
 /**
@@ -20,27 +20,26 @@ if (!lowdb.has('mysql').value()) {
  */
 const db = {
   get mysql() {
-    return lowdb.get('mysql').value();
+    return lowdb.get("mysql").value();
   },
   set mysql(val) {
-    if (Object.prototype.toString.call(val) !== '[object Object]') {
-      return false
+    if (Object.prototype.toString.call(val) !== "[object Object]") {
+      return false;
     }
 
-    Object.keys(val)
-      .forEach(key => {
-        lowdb.update(`mysql[${key}]`, () => val[key]).write();
-      });
+    Object.keys(val).forEach((key) => {
+      lowdb.update(`mysql[${key}]`, () => val[key]).write();
+    });
 
     return db.mysql;
-  }
+  },
 };
 
-Object.defineProperty(db, '_lowdb', {
+Object.defineProperty(db, "_lowdb", {
   configurable: false,
   enumerable: false,
   writable: false,
-  value: lowdb
+  value: lowdb,
 });
 
 module.exports = db;
