@@ -35,6 +35,11 @@ const db = {
   },
 };
 
+/**
+ * 将 lowdb 实例设置在 db 对象上, 作为一个不可修改的属性
+ * 外部可以通过 db_lowdb 来获取实例, 通过 lowdb 提供的 api
+ * 便捷操作 lowdb 下的配置文件s
+ */
 Object.defineProperty(db, "_lowdb", {
   configurable: false,
   enumerable: false,

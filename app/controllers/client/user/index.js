@@ -8,10 +8,10 @@
  * userController
  */
 
-const register = require("./registerController");
-const login = require("./loginController");
+const Code = require("./codeController");
+const User = require("./userController");
 
 module.exports = {
-  register,
-  login,
+  Code,
+  User,
 };
