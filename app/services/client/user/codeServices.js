@@ -8,6 +8,7 @@ const nodemailer = require("nodemailer");
 const lowdb = require("@db/lowdb")._lowdb;
 const ResModel = require("@ResModel");
 const userModel = require("@model/client/user");
+const { random } = require("@/util/");
 
 const emailConfig = lowdb.get("email").value();
 
@@ -47,7 +48,11 @@ class codeServices {
       return checkResult;
     }
 
-    return new ResModel("发送成功", 1);
+    /**
+     * 生成验证码, 暂时存储到数据库中
+     */
+    const code = random(4);
+    return new ResModel({ code });
   }
 }
 

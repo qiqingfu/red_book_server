@@ -34,7 +34,7 @@ class BaseResponse {
     this.errno = null;
 
     /**
-     * res(data)
+     * res(data) 失败
      */
     if (typeof m !== "string") {
       this.data = m;
@@ -44,6 +44,10 @@ class BaseResponse {
       return;
     }
 
+    /**
+     * res(data, 1) 成功
+     * res(data, 0) 失败
+     */
     if (typeof d === "number") {
       this.message = m;
       this.data = null;
@@ -59,16 +63,20 @@ class BaseResponse {
       typeof m === "string" &&
       typeof d === "object" &&
       d !== null &&
-      e === ERRNO_NUMBER.succeed
+      (e === ERRNO_NUMBER.succeed || e === ERRNO_NUMBER.fail)
     ) {
       this.message = m;
       this.data = d;
-      this.errno = ERRNO_NUMBER.succeed;
+      this.errno = e;
 
       return;
     }
 
-    if (typeof m === "string" || m instanceof Error) {
+    /**
+     * res(msg) 失败
+     * res(Error) 失败
+     */
+    if (typeof m === "string") {
       this.message = m.message || m;
       this.errno = ERRNO_NUMBER.fail;
     }
