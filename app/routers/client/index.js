@@ -9,12 +9,8 @@
 
 const Router = require("@koa/router");
 const user = require("./user");
+const { register } = require("../tools");
 
-const router = new Router();
-const middlewares = [user];
+const clientMiddlewares = [user];
 
-middlewares.forEach((middleware) => {
-  router.use(middleware.routes());
-});
-
-module.exports = router;
+module.exports = register(clientMiddlewares)(new Router());

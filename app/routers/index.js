@@ -4,6 +4,7 @@
  */
 const routerMiddleware = require("./routerMiddleware");
 const apiClient = require("./client");
+const apiAdmin = require("./admin");
 
 const API_VERSION = "v1";
 
@@ -20,6 +21,7 @@ module.exports = (app) => {
       app,
       prefix: {
         client: apiClient,
+        admin: apiAdmin,
       },
     })
   );
