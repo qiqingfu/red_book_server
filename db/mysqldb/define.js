@@ -24,7 +24,7 @@ function getModels() {
  * @param sequelize 初始化好的 seq 实例
  * @returns {Object} seq 实例, 和每个模型的实例
  */
-module.exports = (sequelize) => {
+module.exports = (sequelize, isPatch = false) => {
   const models = getModels();
 
   // 用户模型
@@ -40,7 +40,9 @@ module.exports = (sequelize) => {
   /**
    * 向每个模型同步初始数据
    */
-  init(_define);
+  if (isPatch) {
+    init(_define);
+  }
 
   return {
     ..._define,

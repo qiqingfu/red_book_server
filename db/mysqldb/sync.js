@@ -3,7 +3,8 @@
  * @date 2020-03-27 11:12
  */
 
-const { sequelize } = require("./index");
+const sequelize = require("./init");
+require("./define")(sequelize, true);
 
 sequelize
   .sync()

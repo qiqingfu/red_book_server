@@ -14,6 +14,15 @@
     "type": "git",
     "url": "git+https://github.com/qiqingfu/red_book_server.git"
   },
+  "_moduleAliases": {
+    "@": ".",
+    "@services": "app/services",
+    "@controllers": "app/controllers",
+    "@routers": "app/routers",
+    "@model": "app/model",
+    "@db": "db",
+    "@ResModel": "util/responseModel.js"
+  },
   "keywords": [
     "koa"
   ],
@@ -26,6 +35,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "babel-eslint": "^8.2.6",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -47,7 +57,9 @@
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
     "lowdb": "^1.0.0",
+    "module-alias": "^2.2.2",
     "mysql2": "^2.1.0",
+    "nodemailer": "^6.4.6",
     "sequelize": "^5.21.5"
   }
 }

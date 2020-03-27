@@ -24,7 +24,7 @@ module.exports = (modelMap) => {
     if (modelName === user.NAME && !user.DROP) {
       for (let i = 0; i < user.DATA.length; i++) {
         create(model, user.DATA[i]).then(() => {
-          console.log(`${modelName} 模型数据同步完成!`);
+          console.log(`${modelName} 第 ${i + 1} 行: 模型数据同步完成!`);
         });
       }
     } else {

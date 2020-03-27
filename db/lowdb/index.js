@@ -14,6 +14,10 @@ if (!lowdb.has("mysql").value()) {
   lowdb.set("mysql", {}).write();
 }
 
+if (!lowdb.has("email").value()) {
+  lowdb.set("email", {}).write();
+}
+
 /**
  * 便捷获取和更新 db.mysql配置
  * @type {{mysql}}

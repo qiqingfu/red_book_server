@@ -15,6 +15,7 @@ module.exports = {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly",
   },
+  parser: "babel-eslint",
   parserOptions: {
     ecmaVersion: 2018,
   },
@@ -22,6 +23,7 @@ module.exports = {
     "prettier/prettier": "error",
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
+    "max-classes-per-file": ["error", 5],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
