@@ -50,9 +50,9 @@ module.exports = {
       filed: "password",
     },
     sex: {
-      type: S.STRING(20),
+      type: S.CHAR(2),
+      comment: "用户性别",
       filed: "sex",
-      comment: "测试表同步字段",
     },
   },
 };
