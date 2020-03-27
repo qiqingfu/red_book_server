@@ -49,10 +49,5 @@ module.exports = {
       comment: "用户密码",
       filed: "password",
     },
-    sex: {
-      type: S.CHAR(2),
-      comment: "用户性别",
-      filed: "sex",
-    },
   },
 };
