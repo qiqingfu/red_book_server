@@ -4,7 +4,9 @@
  */
 
 const sequelize = require("./init");
-require("./define")(sequelize, true);
+
+const PATCH = true;
+require("./define")(sequelize, PATCH);
 
 sequelize
   .sync()

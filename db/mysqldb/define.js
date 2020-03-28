@@ -16,6 +16,7 @@ function getModels() {
   /* eslint-disable global-require */
   return {
     user: require("./module_types/db_user"),
+    verify_code: require("./module_types/db_verify_code"),
   };
 }
 
@@ -33,8 +34,22 @@ module.exports = (sequelize, isPatch = false) => {
     timestamps: false,
   });
 
+  // 核实验证码模型
+  const VerifyCode = sequelize.define(
+    models.verify_code.TABLE_NAME,
+    models.verify_code.TABLE_COL,
+    {
+      timestamps: false,
+    }
+  );
+
+  /**
+   * 导出的模型统一大写字母开头
+   * 驼峰命名
+   */
   const _define = {
     User,
+    VerifyCode,
   };
 
   /**

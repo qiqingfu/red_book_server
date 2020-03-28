@@ -16,12 +16,13 @@ const emailConfig = lowdb.get("email").value();
  * SMTP  服务器
  * @param mail
  */
-const smtp = (function () {
+const smtp = (function smtp() {
   const config = {
-    host: "smtp.qq.com",
+    service: "qq",
     port: 465,
+    secureConnection: true,
     auth: {
-      email: emailConfig.user,
+      user: emailConfig.user,
       pass: emailConfig.pass,
     },
   };
@@ -52,7 +53,31 @@ class codeServices {
      * 生成验证码, 暂时存储到数据库中
      */
     const code = random(4);
-    return new ResModel({ code });
+    const expiration = Date.now() + 60 * 1000;
+    const mailOptions = {
+      from: `redBook <${emailConfig.user}>`,
+      to: email,
+      subject: "redBook 新用户注册验证码",
+      html: `您的验证码是: <b>${code}</b>`,
+    };
+
+    // 将验证码同步到 verify_code 表
+    const syncResult = await userModel.User.syncVerifyCode(
+      code,
+      email,
+      expiration
+    );
+
+    if (!syncResult.errno) {
+      return syncResult;
+    }
+
+    const sendResult = await smtp.send(mailOptions);
+    if (sendResult.messageId) {
+      return new ResModel("验证码已发送, 请注意注意查收!", 1);
+    }
+
+    return new ResModel("验证码发送失败, 请稍后重试!");
   }
 }
 

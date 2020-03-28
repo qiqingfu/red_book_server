@@ -30,6 +30,10 @@ const sequelize = new Sequelize(
       supportBigNumbers: true,
       bigNumberStrings: true,
     },
+    define: {
+      underscored: true,
+      freezeTableName: true, // 表不要复数
+    },
     timezone: "+08:00", // 将日期从数据库转换为 JavaScript 日期时使用的时区
   }
 );
