@@ -8,6 +8,11 @@
  * @type {Code}
  */
 
+/* eslint-disable import/no-unresolved */
+const ResModel = require("@ResModel");
+const Validator = require("@Validator");
+const tools = require("./tools");
+
 class User {
   /**
    * 用户注册
@@ -15,7 +20,40 @@ class User {
    * @returns {Promise<void>}
    */
   static async register(ctx) {
-    ctx.body = ctx.request.body;
+    const {
+      username = "",
+      email = "",
+      code = "",
+      password = "",
+      repeatpwd = "",
+    } = ctx.request.body;
+
+    const validator = new Validator();
+
+    /**
+     * 注册接口字段验证
+     */
+    const validateRules = [
+      { value: username, rules: tools.username },
+      { value: email, rules: tools.email },
+      { value: code, rules: tools.code },
+      { value: password, rules: tools.password },
+      { value: repeatpwd, rules: tools.repeatpwd },
+    ];
+
+    const errMsg = validator.map(validateRules).start();
+
+    if (errMsg) {
+      ctx.body = new ResModel(errMsg);
+      return;
+    }
+
+    if (password !== repeatpwd) {
+      ctx.body = new ResModel("两次密码输入不一致");
+      return;
+    }
+
+    ctx.body = "注册成功了";
   }
 
   /**

@@ -22,7 +22,8 @@
     "@model": "app/model",
     "@db": "db",
     "@ResModel": "util/responseModel.js",
-    "@codes": "codes"
+    "@codes": "codes",
+    "@Validator": "util/validate/Validator.js"
   },
   "keywords": [
     "koa"

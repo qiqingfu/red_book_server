@@ -5,9 +5,9 @@
 
 /* eslint-disable import/no-unresolved */
 const ResModel = require("@ResModel");
-const validate = require("@/util/validateFiled");
 const codeServices = require("@services/client/user");
-const codes = require("@codes/client");
+const Validator = require("@Validator");
+const tools = require("./tools");
 
 /**
  * 验证码相关的控制器
@@ -22,14 +22,22 @@ class Code {
    */
   static async registerCode(ctx) {
     const email = ctx.request.body && ctx.request.body.email;
+    const validator = new Validator();
 
-    if (!email) {
-      ctx.body = new ResModel(codes.USER_CODE.ERROR_EMAIL_NOT_NULL);
+    /**
+     * 验证邮箱 email 字段的合法性
+     */
+    validator.add(email, tools.email);
+
+    const errMsg = validator.start();
+
+    /**
+     * 验证失败
+     */
+    if (errMsg) {
+      ctx.body = new ResModel(errMsg);
+
       return;
-    }
-
-    if (!validate.isEmail(email)) {
-      ctx.body = new ResModel(codes.USER_CODE.ERROR_EMAIL_ILLEGAL);
     }
 
     ctx.body = await codeServices.Code.sendCode(email);

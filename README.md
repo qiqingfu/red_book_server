@@ -24,6 +24,7 @@
 
 ### 其他文档
 - [配置相关的配置说明](./docs/config/README.md)
+- [Validator字段验证方式](./util/validate/README.md)
 
 ## 结语
 
