@@ -7,6 +7,7 @@
 const ResModel = require("@ResModel");
 const validate = require("@/util/validateFiled");
 const codeServices = require("@services/client/user");
+const codes = require("@codes/client");
 
 /**
  * 验证码相关的控制器
@@ -23,12 +24,12 @@ class Code {
     const email = ctx.request.body && ctx.request.body.email;
 
     if (!email) {
-      ctx.body = new ResModel("邮箱不能为空");
+      ctx.body = new ResModel(codes.USER_CODE.ERROR_EMAIL_NOT_NULL);
       return;
     }
 
     if (!validate.isEmail(email)) {
-      ctx.body = new ResModel("邮箱不合法");
+      ctx.body = new ResModel(codes.USER_CODE.ERROR_EMAIL_ILLEGAL);
     }
 
     ctx.body = await codeServices.Code.sendCode(email);

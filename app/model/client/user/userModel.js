@@ -5,6 +5,7 @@
 /* eslint-disable import/no-unresolved */
 const { User, VerifyCode } = require("@db/mysqldb");
 const ResModel = require("@ResModel");
+const codes = require("@codes/client");
 
 class UserModel {
   /**
@@ -25,7 +26,7 @@ class UserModel {
      * 邮箱已被注册
      */
     if (result) {
-      return new ResModel("邮箱已被注册");
+      return new ResModel(codes.USER_CODE.ERROR_EMAIL_REGISTERED);
     }
 
     return new ResModel("成功", 1);
@@ -60,7 +61,7 @@ class UserModel {
       return false;
     } catch (e) {
       return new ResModel(
-        "验证码保存失败",
+        codes.USER_CODE.FAIL_CODE_SAVE_FAILED,
         {
           error: e.message,
         },

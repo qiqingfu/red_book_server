@@ -8,6 +8,7 @@ const nodemailer = require("nodemailer");
 const lowdb = require("@db/lowdb")._lowdb;
 const ResModel = require("@ResModel");
 const userModel = require("@model/client/user");
+const codes = require("@codes/client");
 const { random } = require("@/util/");
 
 const emailConfig = lowdb.get("email").value();
@@ -74,10 +75,10 @@ class codeServices {
 
     const sendResult = await smtp.send(mailOptions);
     if (sendResult.messageId) {
-      return new ResModel("验证码已发送, 请注意注意查收!", 1);
+      return new ResModel(codes.USER_CODE.SUCCESS_CODE_SENDED, 1);
     }
 
-    return new ResModel("验证码发送失败, 请稍后重试!");
+    return new ResModel(codes.USER_CODE.FAIL_CODE_SEND_FAILED);
   }
 }
 

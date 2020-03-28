@@ -21,7 +21,8 @@
     "@routers": "app/routers",
     "@model": "app/model",
     "@db": "db",
-    "@ResModel": "util/responseModel.js"
+    "@ResModel": "util/responseModel.js",
+    "@codes": "codes"
   },
   "keywords": [
     "koa"

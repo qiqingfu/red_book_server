@@ -15,8 +15,7 @@ class User {
    * @returns {Promise<void>}
    */
   static async register(ctx) {
-    const registerData = ctx.request.body;
-    ctx.body = registerData;
+    ctx.body = ctx.request.body;
   }
 
   /**
