@@ -9,17 +9,25 @@ const userServices = require("@services/client/user");
 const Validator = require("@Validator");
 const tools = require("./tools");
 
-/**
- * 验证码相关的控制器
- * @type {Code}
+/** **
+ * Code Controller
  */
+
 class Code {
   /**
-   * @description 获取验证码接口
-   * @param ctx
-   *
-   * @field email - 接受验证码的邮箱
+   * @catalog controller/user/code
+   * @module 用户注册
+   * @url /client/v1/register/code
+   * @method POST
+   * @title 用户注册, 获取验证码的 Controller 模块
+   * @description 接受 /register/code 路由请求, 处理一些验证操作
+   * @param ctx object koa上下文请求对象
+   * @return null
+   * @return_param null
+   * @remark 负责处理路由请求, 将具体的业务操作代理给 Services 层
+   * @number 1
    */
+
   static async registerCode(ctx) {
     const email = ctx.request.body && ctx.request.body.email;
     const validator = new Validator();

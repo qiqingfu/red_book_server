@@ -43,6 +43,19 @@ const smtp = (function smtp() {
 })();
 
 class CodeServices {
+  /**
+   * @catalog services/user/code
+   * @module 发送验证码
+   * @title 生成验证码, 发送验证码
+   * @description 接受 Controller 委托, 生成验证码并发送给用户
+   * @param email 必选 string 邮箱地址
+   * @return ResModel
+   * @return_param errno number 成功/失败
+   * @return_param data null|objeect
+   * @return_param message string 错误或成功消息
+   * @remark null
+   * @number 2
+   */
   static async sendCode(email) {
     // 查询数据库中是否已存在邮箱
     const checkResult = await userModel.User.emailCheckUser(email);

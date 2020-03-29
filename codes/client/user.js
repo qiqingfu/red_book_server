@@ -15,9 +15,10 @@ const userCode = {
   ERROR_EMAIL_ILLEGAL: "邮箱不合法",
   ERROR_EMAIL_REGISTERED: "邮箱已被注册",
   ERROR_MIN_LENGHT_SIX: "密码最少6位长度",
+  ERROR_MAX_LENGHT_SIXTY: "密码最多16位长度",
   ERROR_EMAIL_NOT_SAME: "注册和接受验证码邮箱不是同一个",
-  ERROR_CODE_EXPIRED: "验证码已过期, 请重新获取",
   ERROR_CODE_ERROR: "验证码错误",
+  ERROR_USER_IS_REGISTERED: "当前用户已注册",
 
   // 成功 Success
   SUCCESS_CODE_SENDED: "验证码已发送, 请注意注意查收!",

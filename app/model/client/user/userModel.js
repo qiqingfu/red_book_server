@@ -10,11 +10,20 @@ const { CODE_EXPIRED_MS } = require("@/util/constant");
 
 class UserModel {
   /**
-   * 验证用户邮箱是否已被注册
-   * @param email
-   *
-   * @returns 返回的结构遵循 ResModel模型
+   * @catalog model/userModel
+   * @module 验证
+   * @title 验证邮箱
+   * @description 1. 验证 email 邮箱是否已被注册。 2. 注册用户时, 防止重复注册
+   * @url null
+   * @param email 必选 string 邮箱地址
+   * @return ResModel
+   * @return_param errno number 成功/失败
+   * @return_param data null|objeect
+   * @return_param message string 错误或成功消息
+   * @remark null
+   * @number
    */
+
   static async emailCheckUser(email) {
     const result = await User.findOne({
       where: {
@@ -34,17 +43,23 @@ class UserModel {
   }
 
   /**
-   * 将已发送给客户端的验证码和邮箱同步到表中
+   * @catalog model/userModel
+   * @module 保存验证码
+   * @title 存储验证码
+   * @description 将已发送给客户端的验证码和邮箱同步到表中,
    * 在真正注册的时候, 再根据注册的邮箱校验验证码的真实性
-   * 过期时间为 60s
-   *
-   * @param code 验证码
-   * @param email 邮箱
-   * @param expiration
-   * @returns {Promise<void>}
+   * @url null
+   * @param code 必选 string 验证码
+   * @param email 必选 string 邮箱地址
+   * @param expiration 必选 number 过期时间戳
+   * @return ResModel
+   * @return_param errno number 成功/失败
+   * @return_param data null|objeect
+   * @return_param message string 错误或成功消息
+   * @remark 过期时间 60s
+   * @number
    */
   static async syncVerifyCode(code, email, expiration) {
-    // Sequelize.upsert
     // https://sequelize.org/v5/class/lib/model.js~Model.html#static-method-upsert
     try {
       const upsertResult = await VerifyCode.upsert({
@@ -59,7 +74,7 @@ class UserModel {
         return new ResModel("验证码已保存", 1);
       }
 
-      return false;
+      return null;
     } catch (e) {
       return new ResModel(
         codes.USER_CODE.FAIL_CODE_SAVE_FAILED,
@@ -72,9 +87,20 @@ class UserModel {
   }
 
   /**
-   * 校验注册验证码的有效性
-   * @param params
-   * @returns {Promise<void>}
+   * @catalog model/userModel
+   * @module 用户注册
+   * @title 校验验证码的有效性
+   * @description 验证用户接受的验证码是否正确
+   * @param params 必选 object 校验需要的用户信息
+   * @param_key email 必选 string 用户邮箱
+   * @param_key code 必选 string 验证码
+   * @param_key expiration 必选 number 过期时间戳
+   * @return ResModel
+   * @return_param errno number 成功/失败
+   * @return_param data null|objeect
+   * @return_param message string 错误或成功消息
+   * @remark null
+   * @number 2
    */
   static async validateCode(params) {
     const { email, code, expiration } = params;
@@ -90,12 +116,15 @@ class UserModel {
       return new ResModel(codes.USER_CODE.ERROR_EMAIL_NOT_SAME);
     }
 
-    // 首先验证是否已过期
-    if (expiration - result.expiration > CODE_EXPIRED_MS) {
-      return new ResModel(codes.USER_CODE.ERROR_CODE_EXPIRED);
-    }
-
-    if (result.code !== code) {
+    /**
+     * 1. 验证码过期
+     * 2. 验证码和和数据库保存的不一致
+     * == 统称 "验证码错误" ==
+     */
+    if (
+      result.code !== code ||
+      expiration - result.expiration > CODE_EXPIRED_MS
+    ) {
       return new ResModel(codes.USER_CODE.ERROR_CODE_ERROR);
     }
 
@@ -103,9 +132,20 @@ class UserModel {
   }
 
   /**
-   * 注册用户信息, 向 user 表中写入新注册的用户数据
-   * @param params
-   * @returns {Promise<null>}
+   * @catalog model/userModel
+   * @module 用户注册
+   * @title 注册用户信息
+   * @description 向 user 表增加新用户数据
+   * @param params 必选 object 校验需要的用户信息
+   * @param_key username 必选 string 用户名
+   * @param_key email 必选 string 用户邮箱
+   * @param_key password 必选 string 经过加密后的密码
+   * @return ResModel
+   * @return_param errno number 成功/失败
+   * @return_param data null|objeect
+   * @return_param message string 错误或成功消息
+   * @remark 注册用户到这里就结束了
+   * @number
    */
   static async registerUserInfo(params) {
     const { username, email, password } = params;

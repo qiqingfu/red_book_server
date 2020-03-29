@@ -57,6 +57,24 @@ class Strategy {
     }
     return null;
   }
+
+  /**
+   *
+   * 一个值的最大长度
+   * @param value
+   * @param {Number} len
+   * @param {String} message
+   */
+  static maxLenght(value, len, message) {
+    const lenght = parseInt(len, 10);
+    if (Number.isNaN(lenght)) {
+      return `Strategy Error: ${len} 字段错误, 希望是一个数字类型`;
+    }
+    if (value.length > lenght) {
+      return message;
+    }
+    return null;
+  }
 }
 
 module.exports = Strategy;

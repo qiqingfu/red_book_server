@@ -16,9 +16,22 @@ const tools = require("./tools");
 
 class User {
   /**
-   * 用户注册
-   * @param ctx
-   * @returns {Promise<void>}
+   * @catalog controller/user
+   * @module 用户注册
+   * @title 用户注册
+   * @description 对字段进行验证, 将业务逻辑委托给 Services 层处理
+   * @url /client/v1/register
+   * @method POST
+   * @param ctx 必选 object 请求的上下文对象
+   * @param_key username 必填 string 用户名
+   * @param_key email 必填 string 注册邮箱
+   * @param_key code 必填 string 验证码
+   * @param_key password 必填 string 初始密码
+   * @param_key repeatpwd 必填 string 确认密码
+   * @return null
+   * @return_param null
+   * @remark 注册邮箱和接受验证码邮箱必须一致
+   * @number 1
    */
   static async register(ctx) {
     const {

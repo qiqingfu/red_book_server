@@ -4,7 +4,9 @@
  */
 /* eslint-disable import/no-unresolved */
 const userModel = require("@model/client/user");
+const ResModel = require("@ResModel");
 const safety = require("@/util/safety");
+const codes = require("@codes/client");
 const debugRegister = require("debug")("register");
 
 /**
@@ -12,12 +14,33 @@ const debugRegister = require("debug")("register");
  */
 class UserServices {
   /**
-   * @description 处理用户注册
-   * @param userInfo {Object}
-   * @returns {Promise<void>}
+   * @catalog services/user
+   * @module 用户注册
+   * @title 用户注册逻辑处理
+   * @description 对字段进行验证, 将业务逻辑委托给 Services 层处理
+   * @param userInfo 必选 object 请求体对象
+   * @param_key username 必填 string 用户名
+   * @param_key email 必填 string 注册邮箱
+   * @param_key code 必填 string 验证码
+   * @param_key password 必填 string 初始密码
+   * @return ResModel
+   * @return_param errno
+   * @return_param data
+   * @return_param message
+   * @remark null
+   * @number 2
    */
   static async registUser(userInfo) {
     const { username, email, code, password } = userInfo;
+
+    /**
+     * 根据邮箱查询当前用户是否已经注册了
+     * 避免重复注册造成的错误
+     */
+    const isRegist = await userModel.User.emailCheckUser(email);
+    if (!isRegist.errno) {
+      return new ResModel(codes.USER_CODE.ERROR_USER_IS_REGISTERED);
+    }
 
     /**
      * 校验验证码的时效性
@@ -47,8 +70,6 @@ class UserServices {
       debugRegister(regResult.data);
       return regResult;
     }
-
-    // 其他业务逻辑处理
 
     return regResult;
   }
