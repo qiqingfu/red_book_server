@@ -17,10 +17,7 @@
 
 
 ### 接口文档
-
-##### [client端文档](./docs/api/client/README.md)
-
-##### admin端文档 (后续开发)
+#### [API 在线文档](https://apizza.net/pro/#/project/f0fe8954882fa46603d746ae88c20c50/browse)
 
 ### 其他文档
 - [配置相关的配置说明](./docs/config/README.md)
