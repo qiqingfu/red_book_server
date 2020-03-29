@@ -30,7 +30,7 @@ class UserModel {
       return new ResModel(codes.USER_CODE.ERROR_EMAIL_REGISTERED);
     }
 
-    return new ResModel("成功", 1);
+    return new ResModel("successs", 1);
   }
 
   /**
@@ -87,16 +87,16 @@ class UserModel {
     });
 
     if (result === null) {
-      return new ResModel("注册和接受验证码邮箱不是同一个");
+      return new ResModel(codes.USER_CODE.ERROR_EMAIL_NOT_SAME);
     }
 
     // 首先验证是否已过期
     if (expiration - result.expiration > CODE_EXPIRED_MS) {
-      return new ResModel("验证码已过期, 请重新获取");
+      return new ResModel(codes.USER_CODE.ERROR_CODE_EXPIRED);
     }
 
     if (result.code !== code) {
-      return new ResModel("验证码错误");
+      return new ResModel(codes.USER_CODE.ERROR_CODE_ERROR);
     }
 
     return new ResModel("success", 1);
@@ -118,13 +118,13 @@ class UserModel {
       });
 
       if (registerResult) {
-        return new ResModel("用户注册成功", 1);
+        return new ResModel(codes.USER_CODE.SUCCESS_USER_REGISTED_SUCCESS, 1);
       }
 
       return null;
     } catch (e) {
       return new ResModel(
-        "用户注册失败",
+        codes.USER_CODE.FAIL_USER_REGISTED_FAIL,
         {
           message: e.message,
         },
