@@ -18,6 +18,10 @@ if (!lowdb.has("email").value()) {
   lowdb.set("email", {}).write();
 }
 
+if (!lowdb.has("system").value()) {
+  lowdb.set("system", {}).write();
+}
+
 /**
  * 便捷获取和更新 db.mysql配置
  * @type {{mysql}}
@@ -36,6 +40,14 @@ const db = {
     });
 
     return db.mysql;
+  },
+
+  // system
+  get system() {
+    return lowdb.get("system").value();
+  },
+  set system(val) {
+    throw new Error("不支持这种方式重写");
   },
 };
 

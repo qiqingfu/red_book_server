@@ -9,7 +9,7 @@ class Strategy {
    * @description 是否为空
    */
   static isNotNull(value, message) {
-    if (value === undefined || value === "") {
+    if (!value) {
       return message;
     }
     return null;

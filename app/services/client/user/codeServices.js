@@ -10,6 +10,7 @@ const ResModel = require("@ResModel");
 const userModel = require("@model/client/user");
 const codes = require("@codes/client");
 const { random } = require("@/util/");
+const { CODE_EXPIRED_MS } = require("@/util/constant");
 
 const emailConfig = lowdb.get("email").value();
 
@@ -41,7 +42,7 @@ const smtp = (function smtp() {
   };
 })();
 
-class codeServices {
+class CodeServices {
   static async sendCode(email) {
     // 查询数据库中是否已存在邮箱
     const checkResult = await userModel.User.emailCheckUser(email);
@@ -54,7 +55,7 @@ class codeServices {
      * 生成验证码, 暂时存储到数据库中
      */
     const code = random(4);
-    const expiration = Date.now() + 60 * 1000;
+    const expiration = Date.now() + CODE_EXPIRED_MS;
     const mailOptions = {
       from: `redBook <${emailConfig.user}>`,
       to: email,
@@ -82,4 +83,4 @@ class codeServices {
   }
 }
 
-module.exports = codeServices;
+module.exports = CodeServices;

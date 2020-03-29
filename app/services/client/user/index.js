@@ -8,7 +8,9 @@
  * services 层
  */
 const Code = require("./codeServices");
+const User = require("./userServices");
 
 module.exports = {
   Code,
+  User,
 };

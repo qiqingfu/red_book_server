@@ -16,4 +16,10 @@ module.exports = {
     HOST: db.mysql.host,
     PORT: db.mysql.port,
   },
+
+  // 系统相关配置
+  SYSTEM: {
+    SECRET: db.system.secret,
+    IV: db.system.iv,
+  },
 };

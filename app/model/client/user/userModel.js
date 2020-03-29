@@ -6,6 +6,7 @@
 const { User, VerifyCode } = require("@db/mysqldb");
 const ResModel = require("@ResModel");
 const codes = require("@codes/client");
+const { CODE_EXPIRED_MS } = require("@/util/constant");
 
 class UserModel {
   /**
@@ -64,6 +65,68 @@ class UserModel {
         codes.USER_CODE.FAIL_CODE_SAVE_FAILED,
         {
           error: e.message,
+        },
+        0
+      );
+    }
+  }
+
+  /**
+   * 校验注册验证码的有效性
+   * @param params
+   * @returns {Promise<void>}
+   */
+  static async validateCode(params) {
+    const { email, code, expiration } = params;
+
+    const result = await VerifyCode.findOne({
+      where: {
+        email,
+      },
+      attributes: ["code", "expiration"],
+    });
+
+    if (result === null) {
+      return new ResModel("注册和接受验证码邮箱不是同一个");
+    }
+
+    // 首先验证是否已过期
+    if (expiration - result.expiration > CODE_EXPIRED_MS) {
+      return new ResModel("验证码已过期, 请重新获取");
+    }
+
+    if (result.code !== code) {
+      return new ResModel("验证码错误");
+    }
+
+    return new ResModel("success", 1);
+  }
+
+  /**
+   * 注册用户信息, 向 user 表中写入新注册的用户数据
+   * @param params
+   * @returns {Promise<null>}
+   */
+  static async registerUserInfo(params) {
+    const { username, email, password } = params;
+
+    try {
+      const registerResult = await User.create({
+        username,
+        email,
+        password,
+      });
+
+      if (registerResult) {
+        return new ResModel("用户注册成功", 1);
+      }
+
+      return null;
+    } catch (e) {
+      return new ResModel(
+        "用户注册失败",
+        {
+          message: e.message,
         },
         0
       );

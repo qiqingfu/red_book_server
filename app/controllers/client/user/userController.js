@@ -10,6 +10,7 @@
 
 /* eslint-disable import/no-unresolved */
 const ResModel = require("@ResModel");
+const userServices = require("@services/client/user");
 const Validator = require("@Validator");
 const tools = require("./tools");
 
@@ -53,7 +54,7 @@ class User {
       return;
     }
 
-    ctx.body = "注册成功了";
+    ctx.body = await userServices.User.registUser(ctx.request.body);
   }
 
   /**

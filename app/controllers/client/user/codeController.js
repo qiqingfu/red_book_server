@@ -5,7 +5,7 @@
 
 /* eslint-disable import/no-unresolved */
 const ResModel = require("@ResModel");
-const codeServices = require("@services/client/user");
+const userServices = require("@services/client/user");
 const Validator = require("@Validator");
 const tools = require("./tools");
 
@@ -40,7 +40,7 @@ class Code {
       return;
     }
 
-    ctx.body = await codeServices.Code.sendCode(email);
+    ctx.body = await userServices.Code.sendCode(email);
   }
 }
 
