@@ -22,4 +22,13 @@ module.exports = {
     SECRET: db.system.secret,
     IV: db.system.iv,
   },
+
+  // 客户端相关配置
+  CLIENT: {
+    SESSION_KEY: "session_id", // 存在客户端cookie中的 key 标识
+
+    // 具体参考 axios 文档: https://www.kancloud.cn/luponu/axios/873153s
+    XSRF_COOKIE_NAME: "XSRF-TOKEN", // xsrf token 的值的cookie的名称
+    XSRF_HEADER_NAME: "X-XSRF-TOEKN", // 带有xsrf令牌值的http标头的名称
+  },
 };

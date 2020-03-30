@@ -3,6 +3,11 @@
  * @date 2020-03-27 11:12
  */
 
+/**
+ * 解决不能在 init 模块中使用别名的问题
+ */
+require("module-alias/register");
+
 const sequelize = require("./init");
 
 const PATCH = true;

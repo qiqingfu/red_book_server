@@ -172,6 +172,33 @@ class UserModel {
       );
     }
   }
+
+  /**
+   * @catalog model/userModel
+   * @module 用户登录
+   * @title 获取用户信息
+   * @description 根据 email 用户邮箱, 从 user 表获取当前用户信息
+   * @param email 必选 string 用户邮箱
+   * @return ResModel
+   * @return_param errno number 成功/失败
+   * @return_param data null|objeect
+   * @return_param message string 错误或成功消息
+   * @remark 注册用户到这里就结束了
+   * @number
+   */
+  static async findUser(email) {
+    const userData = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!userData) {
+      return new ResModel("用户不存在");
+    }
+
+    return new ResModel("success", userData, 1);
+  }
 }
 
 module.exports = UserModel;

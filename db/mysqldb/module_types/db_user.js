@@ -22,6 +22,18 @@ module.exports = {
       filed: "uid",
       comment: "用户uid 主键 自增",
     },
+    uuid: {
+      /**
+       * 用户的唯一标识, 注册时生成
+       * 1. uuid 会存储在当前用户的 session中
+       * 2. uuid会经过加密后, 发送给客户端做 jwt 校验
+       */
+      type: S.STRING(50),
+      allowNull: false,
+      filed: "uuid",
+      unique: true,
+      comment: "用户的唯一标识, 注册时生成",
+    },
     email: {
       // 用户邮箱, 唯一性约束
       type: S.STRING(20),

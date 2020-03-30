@@ -20,6 +20,16 @@ const random = (n = 6, min = 0, max = 9) => {
   return codes.join("");
 };
 
+/**
+ * 下划线命名转驼峰命名
+ * @param str
+ * @returns String
+ */
+const underlineToHump = (str) => {
+  return str.replace(/(_(\w)?)/g, ($0) => $0.slice(1).toUpperCase());
+};
+
 module.exports = {
   random,
+  underlineToHump,
 };

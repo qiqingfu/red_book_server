@@ -4,8 +4,10 @@
  */
 
 /**
- * datas key 是小写的
+ * datas key 要确保模型名字一样
  */
+/* eslint-disable import/no-unresolved */
+const { underlineToHump } = require("@/util/");
 const datas = require("./index");
 
 async function create(model, data, isDrop = false) {
@@ -13,7 +15,9 @@ async function create(model, data, isDrop = false) {
     await model.drop();
   }
 
-  await model.create(data);
+  if (data) {
+    await model.create(data);
+  }
 }
 
 /**
@@ -25,22 +29,30 @@ module.exports = (modelMap) => {
   for (let k = 0; k < names.length; k++) {
     const name = names[k];
     const model = modelMap[name];
-    const modelName = name.toLowerCase();
-    const item = datas[modelName];
+    const item = datas[name];
+    const itemName = underlineToHump(item.NAME);
+    console.log(itemName);
 
     if (item) {
-      if (modelName === item.NAME && !item.DROP) {
+      if (name === itemName && !item.DROP) {
         for (let i = 0; i < item.DATA.length; i++) {
           create(model, item.DATA[i]).then(() => {
-            console.log(`${modelName} 第 ${i + 1} 行: 模型数据同步完成!`);
+            console.log(`${name} 第 ${i + 1} 行: 模型数据同步完成!`);
+          });
+        }
+      } else if (item.DATA.length) {
+        /**
+         * 存在初始数据时就同步, 否则就清除
+         */
+        for (let i = 0; i < item.DATA.length; i++) {
+          create(model, item.DATA[i], item.DROP).then(() => {
+            console.log(`${name} 第 ${i + 1} 行: 模型数据同步完成!`);
           });
         }
       } else {
-        for (let i = 0; i < item.DATA.length; i++) {
-          create(model, item.DATA[i], item.DROP).then(() => {
-            console.log(`${modelName} 第 ${i + 1} 行: 模型数据同步完成!`);
-          });
-        }
+        create(model, null, item.DROP).then(() => {
+          console.log(`${name} 表中的数据已经清除完毕`);
+        });
       }
     }
   }

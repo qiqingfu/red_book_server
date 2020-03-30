@@ -58,6 +58,8 @@
     "koa-body-parser": "^1.1.2",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
+    "koa-mysql-session": "^0.0.2",
+    "koa-session-minimal": "^3.0.4",
     "lowdb": "^1.0.0",
     "module-alias": "^2.2.2",
     "mysql2": "^2.1.0",

@@ -73,6 +73,45 @@ class UserServices {
 
     return regResult;
   }
+
+  /**
+   * @catalog services/user
+   * @module 用户登录
+   * @title 用户登录逻辑处理
+   * @description 1. 验证密码的正确性 2. 登录的 email 是否存在
+   * @param loginInfo 必选 object 请求体对象
+   * @param_key email 必填 string 登录邮箱
+   * @param_key password 必填 string 登录密码
+   * @return ResModel
+   * @return_param errno
+   * @return_param data
+   * @return_param message
+   * @remark null
+   * @number 2
+   */
+  static async userLogin(loginInfo) {
+    const { email, password } = loginInfo;
+
+    /**
+     * 查询用户信息
+     */
+    const userData = await userModel.User.findUser(email);
+
+    if (!userData.errno) {
+      return userData;
+    }
+
+    // 加密后的密码和数据库密码匹配
+    const pwd = safety.cipher.encrypt(password);
+    if (pwd !== userData.data.password) {
+      return new ResModel("登录密码错误");
+    }
+
+    /**
+     * 其他逻辑处理
+     */
+    return new ResModel("登录成功", 1);
+  }
 }
 
 module.exports = UserServices;

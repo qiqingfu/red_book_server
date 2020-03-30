@@ -71,15 +71,41 @@ class User {
   }
 
   /**
-   * 用户登录
-   * @param ctx
-   * @returns {Promise<void>}
+   * @catalog controller/user
+   * @module 用户登录
+   * @title 用户登录接口
+   * @description 对登录字段进行验证, 将登录操作委托给 Services 层处理
+   * @url /client/v1/login
+   * @method POST
+   * @param ctx 必选 object 请求的上下文对象
+   * @param_key email 必填 string 登录邮箱
+   * @param_key password 必填 string 登录密码
+   * @return null
+   * @return_param null
+   * @remark 后期可能加上图片验证码校验
+   * @number 1
    */
   static async login(ctx) {
-    ctx.body = {
-      message: "登录接口",
-      url: ctx.request.url,
-    };
+    let email;
+    let password;
+
+    if (ctx.request.body) {
+      email = ctx.request.body.email;
+      password = ctx.request.body.password;
+    }
+
+    const validator = new Validator();
+    validator.add(email, tools.email);
+    validator.add(password, tools.password);
+
+    const errMsg = validator.start();
+
+    if (errMsg) {
+      ctx.body = new ResModel(errMsg);
+      return;
+    }
+
+    ctx.body = await userServices.User.userLogin({ email, password });
   }
 }
 

@@ -8,7 +8,9 @@
  */
 
 const User = require("./user");
+const VerifyCode = require("./verifyCode");
 
 module.exports = {
-  user: User,
+  User,
+  VerifyCode,
 };

@@ -8,3 +8,10 @@
  * @type {number}
  */
 exports.CODE_EXPIRED_MS = 60 * 1000;
+
+/**
+ * 客户端cookie和服务端session的过期时间
+ * koa-session-minimal 内部默认为 1天
+ * @type {number}
+ */
+exports.COOKIE_EXPIRED_TIME = 24 * 3600 * 1000;

@@ -23,6 +23,7 @@ function getModels() {
 /**
  *
  * @param sequelize 初始化好的 seq 实例
+ * @param isPatch Boolean true表示同步或清除表数据
  * @returns {Object} seq 实例, 和每个模型的实例
  */
 module.exports = (sequelize, isPatch = false) => {
