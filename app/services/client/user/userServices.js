@@ -7,6 +7,9 @@ const userModel = require("@model/client/user");
 const ResModel = require("@ResModel");
 const safety = require("@/util/safety");
 const codes = require("@codes/client");
+const config = require("@/config");
+const { COOKIE_EXPIRED_TIME } = require("@/util/constant");
+const { v4 } = require("uuid");
 const debugRegister = require("debug")("register");
 
 /**
@@ -59,10 +62,12 @@ class UserServices {
     /**
      * 执行注册操作
      */
+    const uuid = v4();
     const regResult = await userModel.User.registerUserInfo({
       username,
       email,
       password: safety.cipher.encrypt(password),
+      uuid,
     });
 
     // 注册用户失败
@@ -82,6 +87,7 @@ class UserServices {
    * @param loginInfo 必选 object 请求体对象
    * @param_key email 必填 string 登录邮箱
    * @param_key password 必填 string 登录密码
+   * @param_key ctx object 请求响应的上下文对象
    * @return ResModel
    * @return_param errno
    * @return_param data
@@ -90,7 +96,7 @@ class UserServices {
    * @number 2
    */
   static async userLogin(loginInfo) {
-    const { email, password } = loginInfo;
+    const { email, password, ctx } = loginInfo;
 
     /**
      * 查询用户信息
@@ -106,6 +112,24 @@ class UserServices {
     if (pwd !== userData.data.password) {
       return new ResModel("登录密码错误");
     }
+
+    /**
+     * 保存用户的登录状态
+     */
+    ctx.session = {
+      isLogin: true,
+      uuid: userData.data.uuid,
+    };
+
+    /**
+     * 生成 token, 根据用户的 uuid加密成token发送给客户端
+     */
+    const token = await safety.jwt.createToken({ uuid: userData.data.uuid });
+
+    ctx.cookies.set(config.CLIENT.XSRF_COOKIE_NAME, token, {
+      maxAge: COOKIE_EXPIRED_TIME,
+      httpOnly: false, // 允许客户端读取cookie, 请求携带到约定的头部s
+    });
 
     /**
      * 其他逻辑处理

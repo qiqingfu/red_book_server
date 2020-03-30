@@ -4,6 +4,7 @@
  */
 
 const crypto = require("crypto");
+const jsonwebtoken = require("jsonwebtoken");
 const config = require("../config");
 
 /**
@@ -45,6 +46,30 @@ const cipher = (function cipher() {
   };
 })();
 
+const jwt = {
+  createToken(data) {
+    return new Promise((resolve, reject) => {
+      jsonwebtoken.sign(data, config.SYSTEM.SECRET, (err, token) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(token);
+      });
+    });
+  },
+  verifyToken(token) {
+    return new Promise((resolve, reject) => {
+      jsonwebtoken.verify(token, config.SYSTEM.SECRET, (err, data) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(data);
+      });
+    });
+  },
+};
+
 module.exports = {
   cipher, // 加密密码
+  jwt, // jwt 加密验证
 };

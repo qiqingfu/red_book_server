@@ -88,7 +88,6 @@ class User {
   static async login(ctx) {
     let email;
     let password;
-
     if (ctx.request.body) {
       email = ctx.request.body.email;
       password = ctx.request.body.password;
@@ -105,7 +104,7 @@ class User {
       return;
     }
 
-    ctx.body = await userServices.User.userLogin({ email, password });
+    ctx.body = await userServices.User.userLogin({ email, password, ctx });
   }
 }
 

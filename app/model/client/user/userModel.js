@@ -148,13 +148,14 @@ class UserModel {
    * @number
    */
   static async registerUserInfo(params) {
-    const { username, email, password } = params;
+    const { username, email, password, uuid } = params;
 
     try {
       const registerResult = await User.create({
         username,
         email,
         password,
+        uuid,
       });
 
       if (registerResult) {
