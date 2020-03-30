@@ -17,7 +17,7 @@
 
 
 ### 接口文档
-#### [API 在线文档](https://apizza.net/pro/#/project/f0fe8954882fa46603d746ae88c20c50/browse)
+#### [API 在线文档](https://qiqingfu.github.io/red_book_server/docs/api/html/)
 
 ### 其他文档
 - [配置相关的配置说明](./docs/config/README.md)
