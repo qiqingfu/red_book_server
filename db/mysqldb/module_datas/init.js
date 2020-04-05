@@ -31,7 +31,6 @@ module.exports = (modelMap) => {
     const model = modelMap[name];
     const item = datas[name];
     const itemName = underlineToHump(item.NAME);
-    console.log(itemName);
 
     if (item) {
       if (name === itemName && !item.DROP) {

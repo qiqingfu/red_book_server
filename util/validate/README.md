@@ -29,7 +29,7 @@ validator.add(body.email, [
 		strategy: "isEmail",
 		message: "邮箱格式错误"
 	}
-]) 
+]);
 
 const errMsg = validator.start()
 ```
@@ -42,3 +42,4 @@ const errMsg = validator.start()
  - isEmail: 是否为邮箱格式
  - isUserName: 是否合法的用户名
  - minLenght: 一个值的最小长度。使用:  minLenght:6 
+ - maxLenght: 一个值的最大长度。使用: maxLenght: 12
