@@ -36,7 +36,7 @@ app.use(bodyParser());
 /**
  * cors 跨域请求支持
  */
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 /**
  * 配置服务端的 session, 结合 mysql 存储用户 session信息
