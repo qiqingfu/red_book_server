@@ -4,10 +4,10 @@
  */
 
 /**
- * 验证码过期时间 60s
+ * 验证码过期时间 120s
  * @type {number}
  */
-exports.CODE_EXPIRED_MS = 60 * 1000;
+exports.CODE_EXPIRED_MS = 60 * 2 * 1000;
 
 /**
  * 客户端cookie和服务端session的过期时间
