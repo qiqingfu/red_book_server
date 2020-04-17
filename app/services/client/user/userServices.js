@@ -128,7 +128,7 @@ class UserServices {
 
     ctx.cookies.set(config.CLIENT.XSRF_COOKIE_NAME, token, {
       maxAge: COOKIE_EXPIRED_TIME,
-      httpOnly: false, // 允许客户端读取cookie, 请求携带到约定的头部s
+      httpOnly: false, // 允许客户端读取cookie, 请求携带到约定的头部
     });
 
     /**
