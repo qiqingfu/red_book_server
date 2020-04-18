@@ -29,7 +29,36 @@ const underlineToHump = (str) => {
   return str.replace(/(_(\w)?)/g, ($0) => $0.slice(1).toUpperCase());
 };
 
+/**
+ * 判断常用的数据类型方法
+ * @type {{}}
+ */
+const Type = (() => {
+  const typeList = [
+    "String",
+    "Number",
+    "Boolean",
+    "Function",
+    "Object",
+    "Array",
+    "Null",
+    "Date",
+  ];
+
+  const type = {};
+
+  for (let i = 0; i < typeList.length; i++) {
+    const val = typeList[i];
+    type[`${val}`] = (obj) => {
+      return Object.prototype.toString.call(obj) === `[object ${val}]`;
+    };
+  }
+
+  return type;
+})();
+
 module.exports = {
   random,
   underlineToHump,
+  Type,
 };

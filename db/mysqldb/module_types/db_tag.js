@@ -21,7 +21,7 @@
 const S = require("sequelize");
 
 module.exports = {
-  TABLE_NAME: "tags",
+  TABLE_NAME: "tag",
   TABLE_COL: {
     // 标签自增 id, 10位长整型
     id: {

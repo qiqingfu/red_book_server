@@ -23,6 +23,7 @@ module.exports = {
     "prettier/prettier": "error",
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
+    "no-await-in-loop": "off",
     "max-classes-per-file": ["error", 5],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'

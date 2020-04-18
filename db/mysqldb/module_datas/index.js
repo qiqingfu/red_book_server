@@ -9,8 +9,10 @@
 
 const User = require("./user");
 const VerifyCode = require("./verifyCode");
+const Tag = require("./tag");
 
 module.exports = {
   User,
   VerifyCode,
+  Tag,
 };
