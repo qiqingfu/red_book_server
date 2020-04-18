@@ -10,7 +10,6 @@
  */
 
 module.exports = {
-  NAME: "Verify_code",
-  DROP: false, // 同步模型数据时, 如果数据库中已存在当前表, 则删除后再同步
+  NAME: "verify_code",
   DATA: [],
 };

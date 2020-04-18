@@ -11,12 +11,13 @@ require("module-alias/register");
 const sequelize = require("./init");
 
 const PATCH = true;
-require("./define")(sequelize, PATCH);
+const { seed } = require("./define")(sequelize, PATCH);
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.log("模型同步成功");
+    seed();
   })
   .catch((err) => {
     console.log("模型同步失败", err);

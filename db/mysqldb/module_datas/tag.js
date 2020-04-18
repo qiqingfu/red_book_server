@@ -7,8 +7,7 @@
  */
 
 module.exports = {
-  NAME: "Tag",
-  DROP: true,
+  NAME: "tag",
   DATA: [
     {
       id: 1,
@@ -19,6 +18,7 @@ module.exports = {
       tag_description: "这是搞笑分类",
     },
     {
+      id: 2,
       tag_id: "qXkrCNEmc51XFgAMo7bl",
       tag_name: "科技数码",
       en_name: "technology_digital",
@@ -26,6 +26,7 @@ module.exports = {
       tag_description: "这是科技数码专区",
     },
     {
+      id: 3,
       tag_id: "p0xJ0Ws3gokz277FjESf",
       tag_name: "美食",
       en_name: "food",
@@ -33,6 +34,7 @@ module.exports = {
       tag_description: "这是美食专区",
     },
     {
+      id: 4,
       tag_id: "4DCEr6ywoZa8Vn4n6bvP",
       tag_name: "运动健身",
       en_name: "work_out",
@@ -40,6 +42,7 @@ module.exports = {
       tag_description: "这是运动健身专区",
     },
     {
+      id: 5,
       tag_id: "n4yvLC1K3BXQf4w1kJ1C",
       tag_name: "美女",
       en_name: "beauty",

@@ -7,12 +7,12 @@
  * 所有 module_datas 入口文件
  */
 
-const User = require("./user");
-const VerifyCode = require("./verifyCode");
-const Tag = require("./tag");
+const user = require("./user");
+const verifyCode = require("./verifyCode");
+const tag = require("./tag");
 
 module.exports = {
-  User,
-  VerifyCode,
-  Tag,
+  user,
+  verify_code: verifyCode,
+  tag,
 };
