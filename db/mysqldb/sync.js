@@ -12,7 +12,7 @@ const sequelize = require("./init");
 
 // PATCH  中必须是对应模型的名字
 // 导出的模型名字
-const PATCH = ["Tag"];
+const PATCH = ["User"];
 const { seed } = require("./define")(sequelize, PATCH);
 
 sequelize
