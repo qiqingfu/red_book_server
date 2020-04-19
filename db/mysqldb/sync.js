@@ -10,7 +10,9 @@ require("module-alias/register");
 
 const sequelize = require("./init");
 
-const PATCH = true;
+// PATCH  中必须是对应模型的名字
+// 导出的模型名字
+const PATCH = ["Tag"];
 const { seed } = require("./define")(sequelize, PATCH);
 
 sequelize

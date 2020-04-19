@@ -2,7 +2,8 @@
  * @author qiqingfu
  * @date 2020-03-27 00:17
  */
-
+/* eslint-disable import/no-unresolved */
+const { Type } = require("@/util");
 const init = require("./module_datas/init");
 /**
  * 将定义的模型(module_types), 同步到数据中, 映射出对应的表结构
@@ -22,6 +23,54 @@ function getModels() {
 }
 
 /**
+ * 处理两种情况
+ * @param p {Boolean | Array}
+ * @param d {Object}
+ * @returns {Object}
+ *
+ * 返回的数据结构为:
+ * {
+ *   isPatch: Boolean,
+ *   _define: Object
+ * }
+ */
+function heavyLoad(p, d) {
+  const returnModel = (isPatch, _define) => {
+    return {
+      isPatch,
+      _define,
+    };
+  };
+
+  const findSomeModel = (_d, _p) => {
+    const set = new Set(_p);
+    const res = {};
+    Object.keys(_d).forEach((modelName) => {
+      const modelDate = _d[modelName];
+      if (set.has(modelName)) res[modelName] = modelDate;
+    });
+
+    return Object.keys(res).length > 0 ? res : null;
+  };
+
+  if (Type.Boolean(p) && p) return returnModel(p, d);
+
+  if ((Type.Boolean(p) && !p) || (Type.Array(p) && p.length < 1))
+    return returnModel(false);
+
+  // single sync model
+  if (Type.Array(p) && p.length > 0) {
+    const defineModels = findSomeModel(d, p);
+
+    // 如果要同步的模型, 没有在 _define定义, defineModels 返回值为 null
+    // 负责返回要同步的模型
+    return returnModel(!!defineModels, defineModels);
+  }
+
+  return undefined;
+}
+
+/**
  *
  * @param sequelize 初始化好的 seq 实例
  * @param isPatch [Boolean | Array] true表示同步或清除表数据, 如果为数组表示同步个别模型
@@ -29,7 +78,7 @@ function getModels() {
  */
 module.exports = (sequelize, isPatch = false) => {
   const models = getModels();
-  let seed = null;
+  let seed = () => console.log(`无任何需要同步的数据`);
 
   // 需要使用迭代器模式进行优化
   // 用户模型
@@ -65,8 +114,9 @@ module.exports = (sequelize, isPatch = false) => {
   /**
    * 向每个模型同步初始数据
    */
-  if (isPatch) {
-    seed = () => init(_define, sequelize.getQueryInterface());
+  const patch = heavyLoad(isPatch, _define);
+  if (patch.isPatch) {
+    seed = () => init(patch._define, sequelize.getQueryInterface());
   }
 
   return {
