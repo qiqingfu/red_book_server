@@ -14,9 +14,12 @@ const PATCH = true;
 const { seed } = require("./define")(sequelize, PATCH);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
-    console.log("模型同步成功");
+    console.log(`
+      模型同步成功...
+      开始将初始数据 seed 到对应的表中
+    `);
     seed();
   })
   .catch((err) => {

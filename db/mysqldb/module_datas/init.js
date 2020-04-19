@@ -29,6 +29,7 @@ const firstLowercase = (str) => {
  * 	  > 将数据同步到表中
  *
  * 3. 删除数据库中所有的表
+ *
  */
 
 module.exports = async (modelMap, queryInterface) => {
@@ -53,6 +54,7 @@ module.exports = async (modelMap, queryInterface) => {
 
     if (idx !== -1) {
       const { NAME, DATA } = datas[dataBaseHavedTablesName[idx]];
+
       queryInterface
         .bulkDelete(NAME, null, {})
         .then((deleteResult) => {
@@ -72,49 +74,3 @@ module.exports = async (modelMap, queryInterface) => {
     }
   });
 };
-
-// async function create(model, data) {
-//   if (data) {
-//     await model.create(data);
-//   }
-// }
-
-/**
- * 向模型同步数据
- */
-// module.exports = async (modelMap) => {
-//   const names = Object.keys(modelMap);
-//
-//   for (let k = 0; k < names.length; k++) {
-//     const name = names[k]; // 开头大写
-//     const model = modelMap[name];
-//     const item = datas[name];
-//     const itemName = underlineToHump(item.NAME);
-//
-//     if (item) {
-//       if (name === itemName && !item.DROP) {
-//         for (let i = 0; i < item.DATA.length; i++) {
-//           create(model, item.DATA[i]).then(() => {
-//             console.log(`${name} 第 ${i + 1} 行: 模型数据同步完成!`);
-//           });
-//         }
-//       } else if (item.DATA.length) {
-//         /**
-//          * 存在初始数据时就同步, 否则就清除
-//          */
-//         if (item.DROP) {
-//           await model.drop();
-//         }
-//         for (let i = 0; i < item.DATA.length; i++) {
-//           create(model, item.DATA[i], item.DROP).then(() => {
-//             console.log(`${name} 第 ${i + 1} 行: 模型数据同步完成!`);
-//           });
-//         }
-//       } else {
-//         create(model, null).then(() => {
-//           console.log(`${name} 表中的数据已经清除完毕`);
-//         });
-//       }
-//     }
-//   }
-// };
