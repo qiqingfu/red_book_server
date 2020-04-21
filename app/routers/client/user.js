@@ -4,7 +4,9 @@
  */
 
 const Router = require("@koa/router");
-const userController = require("../../controllers/client/user");
+/* eslint-disable import/no-unresolved */
+const userController = require("@/app/controllers/client/user");
+const Tags = require("@/app/controllers/client/user/tag");
 
 const router = new Router();
 /**
@@ -21,5 +23,16 @@ router.post("/register/code", userController.Code.registerCode);
  * 用户登录
  */
 router.post("/login", userController.User.login);
+
+/**
+ * 用户模块下标签相关的接口
+ * - 获取所有标签
+ * - 用户选择的标签
+ */
+
+/**
+ * 获取所有标签
+ */
+router.get("/tags", Tags.tags);
 
 module.exports = router;

@@ -61,5 +61,11 @@ module.exports = {
       comment: "用户密码",
       filed: "password",
     },
+    // 当前用户是否已选择相应的标签分类
+    seleted_tag: {
+      type: S.INTEGER(1),
+      comment: "当前用户是否已选择标签",
+      filed: "seleted_tag",
+    },
   },
 };

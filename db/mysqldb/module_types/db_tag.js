@@ -99,10 +99,6 @@ module.exports = {
       defaultValue: 0,
       filed: "tag_followers",
       comment: "有多少用户关注当前标签",
-    },
-    // tag_abc: {
-    //   type: S.STRING(20),
-    //   defaultValue: "hello",
-    // },
+    }
   },
 };
