@@ -55,6 +55,7 @@
     "@koa/cors": "^2.2.3",
     "@koa/router": "^8.0.8",
     "debug": "^4.1.1",
+    "http-errors": "^1.7.3",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^2.5.0",

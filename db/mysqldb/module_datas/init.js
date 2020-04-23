@@ -65,10 +65,10 @@ module.exports = async (modelMap, queryInterface) => {
         });
     } else {
       console.error(`
-        数据向模型同步失败: 
+        数据向模型同步失败:
           数据库中没有找到 ${underlineToHump(modelName)} 这张表
           但是你的模型数据 ${modelName} 却向一个没有表的数据库同步数据
-          
+
           请确保同步数据之前, 模型定义已经映射到数据库中对应的表
       `);
     }

@@ -29,6 +29,6 @@ module.exports = {
 
     // 具体参考 axios 文档: https://www.kancloud.cn/luponu/axios/873153s
     XSRF_COOKIE_NAME: "XSRF-TOKEN", // xsrf token 的值的cookie的名称
-    XSRF_HEADER_NAME: "X-XSRF-TOEKN", // 带有xsrf令牌值的http标头的名称
+    XSRF_HEADER_NAME: "x-xsrf-token", // 带有xsrf令牌值的http标头的名称
   },
 };

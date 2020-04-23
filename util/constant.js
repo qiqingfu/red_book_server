@@ -16,3 +16,9 @@ exports.CODE_EXPIRED_MS = 60 * 2 * 1000;
  * @type {number}
  */
 exports.COOKIE_EXPIRED_TIME = 24 * 3600 * 1000;
+
+/**
+ * 定义响应给客户端的 errno 状态码
+ * 身份过期码
+ */
+exports.LOGINEXPIRED = 2;
