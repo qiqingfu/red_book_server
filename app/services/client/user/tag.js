@@ -36,6 +36,15 @@ const batchCipId = (data) => {
   return resultArray;
 };
 
+/**
+ * 将加密后的标签 id 解密
+ * @param ids {Array}
+ * @returns Array
+ */
+const batchDecodeId = (ids) => {
+  return ids.map((id) => cipher.decode(id));
+};
+
 class TagServices {
   /**
    * @catalog services/tag
@@ -56,6 +65,32 @@ class TagServices {
     }
 
     return Object.assign(findResult, { data: batchCipId(findResult.data) });
+  }
+
+  /**
+   * @catalog services/tag
+   * @module tag
+   * @title 新增、修改和删除标签
+   * @description 一个接口支持新增、更新和删除用户标签
+   * @param ctx 请求响应对象上下文
+   * @param ids 标签 id
+   * @return ResModel
+   * @return_param errno
+   * @return_param data
+   * @return_param message
+   * @remark null
+   * @number 2
+   */
+  static async updateTags(ctx, ids) {
+    const { uuid } = ctx.session;
+    const realTagIds = batchDecodeId(ids);
+
+    /**
+     * 三种操作
+     * 1. 查询当前用户
+     */
+
+    return ids;
   }
 }
 

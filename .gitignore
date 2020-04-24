@@ -20,3 +20,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+!/app/controllers/client/user/tag.js

@@ -19,6 +19,7 @@ function getModels() {
     user: require("./module_types/db_user"),
     verify_code: require("./module_types/db_verify_code"),
     tag: require("./module_types/db_tag"),
+    user_to_tag: require("./module_types/db_user_to_tag"),
   };
 }
 
@@ -101,6 +102,15 @@ module.exports = (sequelize, isPatch = false) => {
     timestamps: false,
   });
 
+  // 用户和标签的关联表 多对多
+  const UserToTag = sequelize.define(
+    models.user_to_tag.TABLE_NAME,
+    models.user_to_tag.TABLE_COL,
+    {
+      timestamps: false,
+    }
+  );
+
   /**
    * 导出的模型统一大写字母开头
    * 驼峰命名
@@ -109,6 +119,7 @@ module.exports = (sequelize, isPatch = false) => {
     User,
     VerifyCode,
     Tag,
+    UserToTag,
   };
 
   /**

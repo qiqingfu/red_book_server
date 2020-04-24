@@ -6,7 +6,11 @@
  * 这是用户标签相关的控制器
  */
 /* eslint-disable import/no-unresolved */
+const ResModel = require("@ResModel");
+const Validator = require("@Validator");
 const TagServices = require("@/app/services/client/user/tag");
+const createError = require("http-errors");
+const { TAGS_CODE } = require("@codes/client");
 
 class Tag {
   /**
@@ -37,11 +41,44 @@ class Tag {
    * @param ctx 必选 object 请求的上下文对象
    * @return null
    * @return_param null
-   * @remark 需要选择的标签 id 组成的数据
+   * @remark 需要选择的标签 id 组成的数据, 客户端请求Content-Type设置为 application/x-www-form-urlencoded; charset=UTF-8
    * @number 1
    */
   static async update(ctx) {
-    ctx.body = "新增,修改和删除标签";
+    const { ids } = ctx.request.body;
+    let tagIds = [];
+
+    /**
+     * ids 参数必传
+     */
+    if (!ids) {
+      ctx.throw(
+        createError(400, "Missing parameter value ids that must be passed")
+      );
+    }
+
+    try {
+      tagIds = ids.split(",");
+    } catch (e) {
+      ctx.throw(createError(400, e.message));
+    }
+
+    const validate = new Validator();
+    validate.add(tagIds, [
+      {
+        strategy: "minLenght:5",
+        message: TAGS_CODE.ERROR_TAGS_LENGHT,
+      },
+    ]);
+
+    const errMsg = validate.start();
+
+    if (errMsg) {
+      ctx.body = new ResModel(errMsg);
+      return;
+    }
+
+    ctx.body = await TagServices.updateTags(ctx, tagIds);
   }
 }
 
