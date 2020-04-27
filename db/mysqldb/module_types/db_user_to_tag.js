@@ -26,27 +26,5 @@ module.exports = {
       autoIncrement: true,
       comment: "关联表主键",
     },
-    uuid: {
-      type: S.STRING(50),
-      allowNull: false,
-      unique: "uuid_tag_id",
-      field: "uuid",
-      comment: "用户表外键字段",
-      references: {
-        model: "user",
-        key: "uuid",
-      },
-    },
-    tag_id: {
-      type: S.CHAR(20),
-      allowNull: false,
-      unique: "uuid_tag_id",
-      field: "tag_id",
-      comment: "标签外键字段",
-      references: {
-        model: "tag",
-        key: "tag_id",
-      },
-    },
   },
 };

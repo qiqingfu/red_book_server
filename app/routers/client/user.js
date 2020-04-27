@@ -7,7 +7,6 @@ const Router = require("@koa/router");
 /* eslint-disable import/no-unresolved */
 const identity = require("@/middlewares/identity");
 const userController = require("@/app/controllers/client/user");
-const Tags = require("@/app/controllers/client/user/tag");
 
 const router = new Router();
 /**
@@ -34,13 +33,13 @@ router.post("/login", userController.User.login);
 /**
  * 获取所有标签
  */
-router.get("/tags", Tags.tags);
+router.get("/tags", userController.Tag.tags);
 
 /**
  * 更新用户选择的标签
  * 包括 新增和删除
  * 当前接口需要鉴权
  */
-router.post("/update/tags", identity, Tags.update);
+router.post("/update/tags", identity, userController.Tag.update);
 
 module.exports = router;

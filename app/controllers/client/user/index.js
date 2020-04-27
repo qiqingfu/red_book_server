@@ -10,8 +10,10 @@
 
 const Code = require("./codeController");
 const User = require("./userController");
+const Tag = require("./tag");
 
 module.exports = {
   Code,
   User,
+  Tag,
 };

@@ -34,12 +34,13 @@ module.exports = {
     },
     // 标签 tag_id 当前标签的唯一标识
     // 固定长度 20个, 不重复唯一的随机码
-    tag_id: {
+    // 因为要用 tag_ttid 作为 user_to_tag 外键
+    ttid: {
       type: S.CHAR(20),
       allowNull: false, // 非空约束
-      filed: "tag_id",
+      filed: "ttid",
       unique: true, // 唯一约束
-      comment: "标签的唯一代表值, 外表可以通过 tag_id 字段查询",
+      comment: "标签的唯一代表值, 外表可以通过 tag_ttid 字段查询",
     },
     /**
      * 标签名
@@ -99,6 +100,6 @@ module.exports = {
       defaultValue: 0,
       filed: "tag_followers",
       comment: "有多少用户关注当前标签",
-    }
+    },
   },
 };

@@ -11,7 +11,7 @@ module.exports = {
   DATA: [
     {
       id: 1,
-      tag_id: "QQyUulqGF38wwH5lhfTf",
+      ttid: "QQyUulqGF38wwH5lhfTf",
       tag_name: "搞笑",
       en_name: "funny",
       tag_icon: null,
@@ -19,7 +19,7 @@ module.exports = {
     },
     {
       id: 2,
-      tag_id: "qXkrCNEmc51XFgAMo7bl",
+      ttid: "qXkrCNEmc51XFgAMo7bl",
       tag_name: "科技数码",
       en_name: "technology_digital",
       tag_icon: null,
@@ -27,7 +27,7 @@ module.exports = {
     },
     {
       id: 3,
-      tag_id: "p0xJ0Ws3gokz277FjESf",
+      ttid: "p0xJ0Ws3gokz277FjESf",
       tag_name: "美食",
       en_name: "food",
       tag_icon: null,
@@ -35,7 +35,7 @@ module.exports = {
     },
     {
       id: 4,
-      tag_id: "4DCEr6ywoZa8Vn4n6bvP",
+      ttid: "4DCEr6ywoZa8Vn4n6bvP",
       tag_name: "运动健身",
       en_name: "work_out",
       tag_icon: null,
@@ -43,7 +43,7 @@ module.exports = {
     },
     {
       id: 5,
-      tag_id: "n4yvLC1K3BXQf4w1kJ1C",
+      ttid: "n4yvLC1K3BXQf4w1kJ1C",
       tag_name: "美女",
       en_name: "beauty",
       tag_icon: null,

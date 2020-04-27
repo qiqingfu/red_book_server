@@ -9,8 +9,10 @@
  */
 const Code = require("./codeServices");
 const User = require("./userServices");
+const Tag = require("./tag");
 
 module.exports = {
   Code,
   User,
+  Tag,
 };

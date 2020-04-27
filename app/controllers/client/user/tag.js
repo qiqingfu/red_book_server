@@ -8,7 +8,7 @@
 /* eslint-disable import/no-unresolved */
 const ResModel = require("@ResModel");
 const Validator = require("@Validator");
-const TagServices = require("@/app/services/client/user/tag");
+const userServices = require("@services/client/user");
 const createError = require("http-errors");
 const { TAGS_CODE } = require("@codes/client");
 
@@ -27,7 +27,7 @@ class Tag {
    * @number 1
    */
   static async tags(ctx) {
-    ctx.body = await TagServices.getAllTags();
+    ctx.body = await userServices.Tag.getAllTags();
   }
 
   /**
@@ -44,7 +44,7 @@ class Tag {
    * @remark 需要选择的标签 id 组成的数据, 客户端请求Content-Type设置为 application/x-www-form-urlencoded; charset=UTF-8
    * @number 1
    */
-  static async update(ctx) {
+  static async update(ctx, next) {
     const { ids } = ctx.request.body;
     let tagIds = [];
 
@@ -78,7 +78,9 @@ class Tag {
       return;
     }
 
-    ctx.body = await TagServices.updateTags(ctx, tagIds);
+    ctx.body = await userServices.Tag.updateTags(ctx.session, tagIds);
+
+    return next();
   }
 }
 

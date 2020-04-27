@@ -36,7 +36,7 @@ function verifyUser(t, session) {
   });
 }
 
-module.exports = function identity(ctx, next) {
+module.exports = async function identity(ctx, next) {
   const userToken = ctx.header[config.CLIENT.XSRF_HEADER_NAME] || "";
   const userCookie = ctx.cookies.get(config.CLIENT.SESSION_KEY) || "";
   debug(userToken);
@@ -46,15 +46,16 @@ module.exports = function identity(ctx, next) {
     ctx.throw(createError(401, SEND_CLIENT_401_STATUS_MESSAGE));
   }
 
-  verifyUser(userToken, ctx.session)
-    .then(() => {
-      next();
-    })
-    .catch((code) => {
-      if (code === STATUS.expired) {
-        ctx.body = { errno: LOGINEXPIRED, message: "身份已过期, 请重新登录" };
-      } else {
-        ctx.throw(createError(401, SEND_CLIENT_401_STATUS_MESSAGE));
-      }
-    });
+  try {
+    await verifyUser(userToken, ctx.session);
+    // 导致客户端接受到 404 Not Found 的原因是, 上一个中间件没有将下一个中间件的响应结果返回
+    // return next() 正确
+    return next();
+  } catch (code) {
+    if (code === STATUS.expired) {
+      ctx.body = { errno: LOGINEXPIRED, message: "身份已过期, 请重新登录" };
+    } else {
+      ctx.throw(createError(401, SEND_CLIENT_401_STATUS_MESSAGE));
+    }
+  }
 };

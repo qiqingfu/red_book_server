@@ -119,6 +119,7 @@ class UserServices {
     ctx.session = {
       isLogin: true,
       uuid: userData.data.uuid,
+      uid: userData.data.uid,
     };
 
     /**

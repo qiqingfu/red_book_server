@@ -110,6 +110,14 @@ module.exports = (sequelize, isPatch = false) => {
       timestamps: false,
     }
   );
+  User.belongsToMany(Tag, {
+    through: UserToTag,
+    foreignKey: "user_id",
+  });
+  Tag.belongsToMany(User, {
+    through: UserToTag,
+    foreignKey: "tag_ttid",
+  });
 
   /**
    * 导出的模型统一大写字母开头
