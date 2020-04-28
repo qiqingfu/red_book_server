@@ -49,5 +49,13 @@ module.exports = {
       tag_icon: null,
       tag_description: "这是美女专区",
     },
+    {
+      id: 6,
+      ttid: "1eFeXtWtnI9tJLjMj1nq",
+      tag_name: "发型",
+      en_name: "hair",
+      tag_icon: null,
+      tag_description: "这是发型专区",
+    },
   ],
 };

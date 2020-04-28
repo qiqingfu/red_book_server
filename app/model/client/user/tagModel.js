@@ -46,17 +46,18 @@ class TagModel {
   static async findTagById(uuid) {
     let findResult;
     try {
-      // 根据 uuid, 在 User 表找到当前这个用户实例
-      const user = await User.findOne({
-        where: {
-          uuid,
+      findResult = await User.findAll({
+        raw: true,
+        where: { uuid },
+        include: {
+          model: Tag,
+          attributes: ["ttid"],
+        },
+        attributes: {
+          exclude: ["password"],
         },
       });
-      // 获取当前用户对应的多个标签数据
-      findResult = await user.getTags({
-        raw: true,
-        attributes: ["ttid"],
-      });
+
       debug("findResult =>", findResult);
     } catch (e) {
       console.log(e);
@@ -80,7 +81,15 @@ class TagModel {
           uuid,
         },
       });
-      console.log(user);
+
+      const tags = await Tag.findAll({
+        where: {
+          ttid: data,
+        },
+      });
+
+      // 将 data 数据和 uuid 用户进行关联
+      await user.setTags(tags);
     } catch (e) {
       console.log("error", e);
       return new ResModel("标签保存失败");

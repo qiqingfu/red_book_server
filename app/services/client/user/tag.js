@@ -10,6 +10,7 @@
 const ResModel = require("@ResModel");
 const { TagModel } = require("@/app/model/client/user");
 const { cipher } = require("@/util/safety");
+const debug = require("debug")("/update/tags");
 
 /**
  *
@@ -44,6 +45,40 @@ const batchCipId = (data) => {
  */
 const batchDecodeId = (ids) => {
   return ids.map((id) => cipher.decode(id));
+};
+
+/**
+ *
+ * @param {Array} source 已存在的标签数据
+ * @param {Array} target 客户端传递来的数据
+ * @returns {Object} 需要被删除和需要被新增的标签
+ */
+const diffTags = (source, target) => {
+  let s = new Set(source);
+
+  const result = target.reduce((result, cur) => {
+    if (!result["add"]) result["add"] = [];
+
+    // 需要被新增的标签数据
+    if (!s.has(cur)) {
+      result["add"].push(cur);
+      s.delete(cur);
+    }
+
+    return result;
+  }, {});
+
+  // 如果 s Set 集合中还存在标签数据, 则说明这些数据时被删除的
+  if (s.size > 0) {
+    result["delete"] = s.values();
+  }
+
+  // 如果 source 和 target 长度一致, 则为更新操作
+  if (source.length === target.length) {
+    result["update"] = result["delete"];
+  }
+
+  return result;
 };
 
 class TagServices {
@@ -84,6 +119,8 @@ class TagServices {
    */
   static async updateTags(session, ids) {
     const { uuid } = session;
+
+    // 客户端最新标签数据s
     const realTagIds = batchDecodeId(ids);
 
     /**
@@ -98,7 +135,10 @@ class TagServices {
       return findTagByIdResult;
     }
 
-    const findTagList = findTagByIdResult.data;
+    // 用户已存在的标签数据, map 取出标签字段组成数组, filter 过滤 tags.ttid 为 null 的情况
+    const findTagList = findTagByIdResult.data
+      .map((e) => e["tags.ttid"])
+      .filter((e) => Boolean(e));
 
     /**
      * 对应第一种
@@ -117,6 +157,15 @@ class TagServices {
 
       return saveResult;
     }
+
+    /**
+     * diff 需要将用于已有的标签数据， 和客户端最新传递过来的数据进行 diff
+     * diff 结束之后, 可以得知需要被删除和新增的标签数据
+     * 在用户已有标签和客户端传递过来的标签相同的情况下, 需要新增的标签直接更新需要删除的标签
+     */
+
+    const diffResult = diffTags(realTagIds, findTagList);
+    debug("diffResult =>", diffResult);
 
     return new ResModel("hello");
   }

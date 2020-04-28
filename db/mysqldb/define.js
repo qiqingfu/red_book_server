@@ -112,11 +112,13 @@ module.exports = (sequelize, isPatch = false) => {
   );
   User.belongsToMany(Tag, {
     through: UserToTag,
-    foreignKey: "user_id",
+    sourceKey: "uuid",
+    foreignKey: "uuid",
   });
   Tag.belongsToMany(User, {
     through: UserToTag,
-    foreignKey: "tag_ttid",
+    sourceKey: "ttid",
+    foreignKey: "ttid",
   });
 
   /**
