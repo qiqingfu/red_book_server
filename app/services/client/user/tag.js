@@ -10,6 +10,7 @@
 const ResModel = require("@ResModel");
 const { TagModel } = require("@/app/model/client/user");
 const { cipher } = require("@/util/safety");
+const { diffArray } = require("@/util");
 const debug = require("debug")("/update/tags");
 
 /**
@@ -51,32 +52,32 @@ const batchDecodeId = (ids) => {
  *
  * @param {Array} source 已存在的标签数据
  * @param {Array} target 客户端传递来的数据
- * @returns {Object} 需要被删除和需要被新增的标签
+ * @returns {Object} 需要被删除和需要被新增的标签, 以及是否需要更新
  */
 const diffTags = (source, target) => {
-  let s = new Set(source);
+  const result = {
+    deleteTagList: [],
+    addTagList: [],
+    noPatch: true,
+  };
 
-  const result = target.reduce((result, cur) => {
-    if (!result["add"]) result["add"] = [];
+  if (diffArray(source, target)) return result;
+  const targetSource = new Set(target);
 
-    // 需要被新增的标签数据
-    if (!s.has(cur)) {
-      result["add"].push(cur);
-      s.delete(cur);
+  for (let i = 0; i < source.length; i++) {
+    const val = source[i];
+    if (targetSource.has(val)) {
+      targetSource.delete(val);
+    } else {
+      result.deleteTagList.push(val);
     }
-
-    return result;
-  }, {});
-
-  // 如果 s Set 集合中还存在标签数据, 则说明这些数据时被删除的
-  if (s.size > 0) {
-    result["delete"] = s.values();
   }
 
-  // 如果 source 和 target 长度一致, 则为更新操作
-  if (source.length === target.length) {
-    result["update"] = result["delete"];
+  if (targetSource.size) {
+    result.addTagList = [...targetSource.values()];
   }
+
+  result.noPatch = false;
 
   return result;
 };
@@ -120,7 +121,7 @@ class TagServices {
   static async updateTags(session, ids) {
     const { uuid } = session;
 
-    // 客户端最新标签数据s
+    // 客户端最新标签数据
     const realTagIds = batchDecodeId(ids);
 
     /**
@@ -130,7 +131,7 @@ class TagServices {
      * 3. 如果当前用户已有的标签 比 客户端传递的标签 id多, 则说明是删除或更新
      */
 
-    const findTagByIdResult = await TagModel.findTagById(uuid);
+    const findTagByIdResult = await TagModel._findTagById(uuid);
     if (!findTagByIdResult.errno) {
       return findTagByIdResult;
     }
@@ -164,10 +165,42 @@ class TagServices {
      * 在用户已有标签和客户端传递过来的标签相同的情况下, 需要新增的标签直接更新需要删除的标签
      */
 
-    const diffResult = diffTags(realTagIds, findTagList);
-    debug("diffResult =>", diffResult);
+    const { deleteTagList, addTagList, noPatch } = diffTags(
+      findTagList,
+      realTagIds
+    );
 
-    return new ResModel("hello");
+    /**
+     * 不需要更新的情况下, 直接响应给客户端
+     */
+    if (noPatch) {
+      debug("noPatch");
+      return new ResModel("标签更新成功", 1);
+    }
+
+    /**
+     * 如果有移除的标签, 先移除再插入
+     */
+    try {
+      if (deleteTagList.length) {
+        const deleteTagResult = await TagModel.deleteTags(deleteTagList, uuid);
+        if (deleteTagResult.errno) {
+          return deleteTagResult;
+        }
+      }
+
+      if (addTagList.length) {
+        const addTagResult = await TagModel.addTags(addTagList, uuid);
+        if (addTagResult.errno) {
+          return addTagResult;
+        }
+      }
+    } catch (e) {
+      debug(e);
+      return new ResModel("系统错误");
+    }
+
+    return new ResModel("更新标签成功", 1);
   }
 }
 

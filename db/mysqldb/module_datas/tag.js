@@ -51,7 +51,7 @@ module.exports = {
     },
     {
       id: 6,
-      ttid: "1eFeXtWtnI9tJLjMj1nq",
+      ttid: "mxSpu2chrkmV4CpuN9rB",
       tag_name: "发型",
       en_name: "hair",
       tag_icon: null,

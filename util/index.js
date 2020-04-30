@@ -57,8 +57,68 @@ const Type = (() => {
   return type;
 })();
 
+/**
+ * 比较两个数组值是否完全一致
+ */
+const diffArray = (() => {
+  const validate = (data) => {
+    if (!Type.Array(data)) {
+      throw new Error(`Data type error. The expectation is an array`);
+    }
+  };
+
+  function iterator(obj) {
+    validate(obj);
+    obj.sort();
+
+    let current = 0;
+
+    const next = () => {
+      current++;
+    };
+
+    const done = () => {
+      return current === obj.length;
+    };
+
+    const getVal = () => {
+      return obj[current];
+    };
+
+    return {
+      next,
+      done,
+      getVal,
+      length: obj.length,
+    };
+  }
+
+  function compare(iteratorSource, iteratorTarget) {
+    let result = true;
+    if (iteratorSource.length !== iteratorTarget.length) {
+      return !result;
+    }
+
+    while (!iteratorSource.done() && !iteratorTarget.done()) {
+      if (iteratorSource.getVal() !== iteratorTarget.getVal()) {
+        result = false;
+        break;
+      }
+      iteratorSource.next();
+      iteratorTarget.next();
+    }
+
+    return result;
+  }
+
+  return function diff(source, target) {
+    return compare(iterator(source), iterator(target));
+  };
+})();
+
 module.exports = {
   random,
   underlineToHump,
   Type,
+  diffArray,
 };

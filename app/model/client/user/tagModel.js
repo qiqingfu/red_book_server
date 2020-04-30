@@ -43,7 +43,7 @@ class TagModel {
    * @param uuid User表 uuid, 用户唯一标识
    * @returns ResModel
    */
-  static async findTagById(uuid) {
+  static async _findTagById(uuid) {
     let findResult;
     try {
       findResult = await User.findAll({
@@ -96,6 +96,55 @@ class TagModel {
     }
 
     return new ResModel("标签保存成功", {}, 1);
+  }
+
+  /**
+   *
+   * @param data 需要移除的标签的唯一标识
+   * @param uuid 需要批量删除标签的用户 uuid
+   * @description uuid 是相同的, 而 tag_id 不一定是相同的
+   * @returns ResModel
+   */
+  static async deleteTags(data, uuid) {
+    const user = await User.findOne({
+      where: {
+        uuid,
+      },
+    });
+
+    const tags = await Tag.findAll({
+      where: {
+        ttid: data,
+      },
+    });
+
+    try {
+      await user.removeTags(tags);
+      return new ResModel("更新标签成功", 1);
+    } catch (e) {
+      return new ResModel("更新标签失败", { error: "delete" }, 0);
+    }
+  }
+
+  static async addTags(data, uuid) {
+    const user = await User.findOne({
+      where: {
+        uuid,
+      },
+    });
+
+    const tags = await Tag.findAll({
+      where: {
+        ttid: data,
+      },
+    });
+
+    try {
+      await user.addTags(tags);
+      return new ResModel("标签更新成功", 1);
+    } catch (e) {
+      return new ResModel("更新标签失败", { error: "add" }, 0);
+    }
   }
 }
 
