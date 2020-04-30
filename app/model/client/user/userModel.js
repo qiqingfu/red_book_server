@@ -7,6 +7,7 @@ const { User, VerifyCode } = require("@db/mysqldb");
 const ResModel = require("@ResModel");
 const codes = require("@codes/client");
 const { CODE_EXPIRED_MS } = require("@/util/constant");
+const { Op } = require("sequelize");
 
 class UserModel {
   /**
@@ -180,6 +181,7 @@ class UserModel {
    * @title 获取用户信息
    * @description 根据 email 用户邮箱, 从 user 表获取当前用户信息
    * @param email 必选 string 用户邮箱
+   * @param uuid 可选 string 用户的 uuid 唯一标识, 用于内部系统查询用户数据
    * @return ResModel
    * @return_param errno number 成功/失败
    * @return_param data null|objeect
@@ -187,10 +189,10 @@ class UserModel {
    * @remark 注册用户到这里就结束了
    * @number
    */
-  static async findUser(email) {
+  static async findUser(email, uuid = "") {
     const userData = await User.findOne({
       where: {
-        email,
+        [Op.or]: [{ email }, { uuid }],
       },
     });
 

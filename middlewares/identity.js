@@ -39,8 +39,8 @@ function verifyUser(t, session) {
 module.exports = async function identity(ctx, next) {
   const userToken = ctx.header[config.CLIENT.XSRF_HEADER_NAME] || "";
   const userCookie = ctx.cookies.get(config.CLIENT.SESSION_KEY) || "";
-  debug(userToken);
-  debug(userCookie);
+  debug("userToken", userToken);
+  debug("userCookie", userCookie);
 
   if (!userToken || !userCookie) {
     ctx.throw(createError(401, SEND_CLIENT_401_STATUS_MESSAGE));
@@ -58,4 +58,6 @@ module.exports = async function identity(ctx, next) {
       ctx.throw(createError(401, SEND_CLIENT_401_STATUS_MESSAGE));
     }
   }
+
+  return false;
 };

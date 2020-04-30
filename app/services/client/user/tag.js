@@ -131,14 +131,14 @@ class TagServices {
      * 3. 如果当前用户已有的标签 比 客户端传递的标签 id多, 则说明是删除或更新
      */
 
-    const findTagByIdResult = await TagModel._findTagById(uuid);
+    const findTagByIdResult = await TagModel.findTagById(uuid);
     if (!findTagByIdResult.errno) {
       return findTagByIdResult;
     }
 
     // 用户已存在的标签数据, map 取出标签字段组成数组, filter 过滤 tags.ttid 为 null 的情况
     const findTagList = findTagByIdResult.data
-      .map((e) => e["tags.ttid"])
+      .map((e) => e.ttid)
       .filter((e) => Boolean(e));
 
     /**
@@ -201,6 +201,22 @@ class TagServices {
     }
 
     return new ResModel("更新标签成功", 1);
+  }
+
+  /**
+   * @catalog services/tag
+   * @module tag
+   * @title 获取当前用户的所有标签数据
+   * @param session, 当前用户的登录状态
+   * @return ResModel
+   * @return_param errno
+   * @return_param data
+   * @return_param message
+   * @remark null
+   * @number 1
+   */
+  static async getUserTags({ uuid }) {
+    return TagModel.findTagById(uuid);
   }
 }
 

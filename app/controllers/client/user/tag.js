@@ -44,7 +44,7 @@ class Tag {
    * @remark 需要选择的标签 id 组成的数据, 客户端请求Content-Type设置为 application/x-www-form-urlencoded; charset=UTF-8
    * @number 1
    */
-  static async update(ctx, next) {
+  static async update(ctx) {
     const { ids } = ctx.request.body;
     let tagIds = [];
 
@@ -79,8 +79,22 @@ class Tag {
     }
 
     ctx.body = await userServices.Tag.updateTags(ctx.session, tagIds);
+  }
 
-    return next();
+  /**
+   * @catalog controller/user/tag
+   * @module 用户标签
+   * @title 获取当前用户已选择的标签数据
+   * @url /client/v1/user/tags
+   * @method GET
+   * @param ctx 必选 object 请求的上下文对象
+   * @return null
+   * @return_param null
+   * @remark
+   * @number 1
+   */
+  static async userTags(ctx) {
+    ctx.body = await userServices.Tag.getUserTags(ctx.session);
   }
 }
 

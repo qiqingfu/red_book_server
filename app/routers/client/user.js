@@ -36,6 +36,11 @@ router.post("/login", userController.User.login);
 router.get("/tags", userController.Tag.tags);
 
 /**
+ * 获取当前用户的标签数据
+ */
+router.get("/user/tags", identity, userController.Tag.userTags);
+
+/**
  * 更新用户选择的标签
  * 包括 新增和删除
  * 当前接口需要鉴权

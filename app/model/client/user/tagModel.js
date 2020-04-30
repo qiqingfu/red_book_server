@@ -6,6 +6,9 @@ const ResModel = require("@ResModel");
 const { Tag, User } = require("@db/mysqldb");
 const debug = require("debug")("/update/tags");
 
+// 后期需要优化, 抽离系统内部公用的调用
+const UserModel = require("./userModel");
+
 class TagModel {
   /**
    * @catalog model/tagModel
@@ -43,18 +46,13 @@ class TagModel {
    * @param uuid User表 uuid, 用户唯一标识
    * @returns ResModel
    */
-  static async _findTagById(uuid) {
+  static async findTagById(uuid) {
     let findResult;
     try {
-      findResult = await User.findAll({
-        raw: true,
+      findResult = await User.findOne({
         where: { uuid },
         include: {
           model: Tag,
-          attributes: ["ttid"],
-        },
-        attributes: {
-          exclude: ["password"],
         },
       });
 
@@ -64,7 +62,7 @@ class TagModel {
       return new ResModel("查询用户标签错误");
     }
 
-    return new ResModel(findResult, "查询用户标签成功");
+    return new ResModel(findResult.tags, "查询用户标签成功");
   }
 
   /**
@@ -76,11 +74,7 @@ class TagModel {
    */
   static async saveTagById(data, uuid) {
     try {
-      const user = await User.findOne({
-        wheree: {
-          uuid,
-        },
-      });
+      const user = await UserModel.findUser("", uuid);
 
       const tags = await Tag.findAll({
         where: {
@@ -89,7 +83,7 @@ class TagModel {
       });
 
       // 将 data 数据和 uuid 用户进行关联
-      await user.setTags(tags);
+      await user.data.setTags(tags);
     } catch (e) {
       console.log("error", e);
       return new ResModel("标签保存失败");
@@ -120,12 +114,19 @@ class TagModel {
 
     try {
       await user.removeTags(tags);
-      return new ResModel("更新标签成功", 1);
+      return new ResModel("标签更新成功", 1);
     } catch (e) {
       return new ResModel("更新标签失败", { error: "delete" }, 0);
     }
   }
 
+  /**
+   *
+   * @param data 需要新增的标签的唯一标识
+   * @param uuid 需要批量新增标签的用户 uuid
+   * @description uuid 是相同的, 而 tag_id 不一定是相同的
+   * @returns ResModel
+   */
   static async addTags(data, uuid) {
     const user = await User.findOne({
       where: {
