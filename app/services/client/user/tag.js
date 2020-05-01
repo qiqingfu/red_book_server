@@ -152,7 +152,7 @@ class TagServices {
       /**
        * 存储用户的标签数据
        */
-      const saveResult = await TagModel.updateTagById(realTagIds, uuid, "add");
+      const saveResult = await TagModel.updateTagById(realTagIds, uuid, "set");
       if (!saveResult.errno) {
         return saveResult;
       }

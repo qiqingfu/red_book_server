@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 require("module-alias/register");
-const app = require("../app");
-const config = require("../config");
 const debug = require("debug")("www");
 const http = require("http");
+const app = require("../app");
+const config = require("../config");
 
 const port = normalizePort(config.SERVER_PORT);
 

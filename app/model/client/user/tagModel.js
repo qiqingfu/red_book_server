@@ -3,7 +3,7 @@
  */
 /* eslint-disable import/no-unresolved */
 const ResModel = require("@ResModel");
-const { Tag, User } = require("@db/mysqldb");
+const { Tag, User, sequelize } = require("@db/mysqldb");
 const debug = require("debug")("/update/tags");
 
 // 后期需要优化, 抽离系统内部公用的调用
@@ -85,11 +85,36 @@ class TagModel {
       async delete(userInstance, tagInstance) {
         await userInstance.removeTags(tagInstance);
       },
+      // 用户第一次选择标签
+      // 使用事务操作
+      async set(userInstance, tagInstance) {
+        sequelize
+          .transaction((t) => {
+            return userInstance
+              .setTags(tagInstance, { transaction: t })
+              .then((setResult) => {
+                debug("用户新增数据, 事务操作第一步", setResult);
+                // 更新 user 的 seleted_tag 字段为 1
+                return userInstance.update(
+                  { seleted_tag: "1" },
+                  {
+                    fields: ["seleted_tag"],
+                    transaction: t,
+                  }
+                );
+              });
+          })
+          .then((result) => {
+            debug("事务提交成功", result);
+          })
+          .catch((err) => {
+            debug("事务提交失败, 已回滚", err);
+          });
+      },
     };
 
     try {
       const user = await UserModel.findUser("", uuid);
-
       const tags = await Tag.findAll({
         where: {
           ttid: data,
