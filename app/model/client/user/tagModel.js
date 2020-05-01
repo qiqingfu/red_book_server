@@ -69,10 +69,24 @@ class TagModel {
    *
    * @param data 批量存储的数据 [{ uuid: xxx, tag_id: xxx }, {uuid: xxx, tag_id: xxx}]
    * @param uuid 需要批量添加标签的用户 uuid
+   * @param type ['add', 'delete']
    * @description uuid 是相同的, 而 tag_id 不一定是相同的
    * @returns ResModel
    */
-  static async saveTagById(data, uuid) {
+  static async updateTagById(data, uuid, type) {
+    if (!type) {
+      throw new Error("操作标签的类型必须指定");
+    }
+
+    const strategyMaps = {
+      async add(userInstance, tagInstance) {
+        await userInstance.addTags(tagInstance);
+      },
+      async delete(userInstance, tagInstance) {
+        await userInstance.removeTags(tagInstance);
+      },
+    };
+
     try {
       const user = await UserModel.findUser("", uuid);
 
@@ -83,69 +97,13 @@ class TagModel {
       });
 
       // 将 data 数据和 uuid 用户进行关联
-      await user.data.setTags(tags);
+      strategyMaps[type].call(this, user.data, tags);
     } catch (e) {
       console.log("error", e);
-      return new ResModel("标签保存失败");
+      return new ResModel("标签更新失败");
     }
 
-    return new ResModel("标签保存成功", {}, 1);
-  }
-
-  /**
-   *
-   * @param data 需要移除的标签的唯一标识
-   * @param uuid 需要批量删除标签的用户 uuid
-   * @description uuid 是相同的, 而 tag_id 不一定是相同的
-   * @returns ResModel
-   */
-  static async deleteTags(data, uuid) {
-    const user = await User.findOne({
-      where: {
-        uuid,
-      },
-    });
-
-    const tags = await Tag.findAll({
-      where: {
-        ttid: data,
-      },
-    });
-
-    try {
-      await user.removeTags(tags);
-      return new ResModel("标签更新成功", 1);
-    } catch (e) {
-      return new ResModel("更新标签失败", { error: "delete" }, 0);
-    }
-  }
-
-  /**
-   *
-   * @param data 需要新增的标签的唯一标识
-   * @param uuid 需要批量新增标签的用户 uuid
-   * @description uuid 是相同的, 而 tag_id 不一定是相同的
-   * @returns ResModel
-   */
-  static async addTags(data, uuid) {
-    const user = await User.findOne({
-      where: {
-        uuid,
-      },
-    });
-
-    const tags = await Tag.findAll({
-      where: {
-        ttid: data,
-      },
-    });
-
-    try {
-      await user.addTags(tags);
-      return new ResModel("标签更新成功", 1);
-    } catch (e) {
-      return new ResModel("更新标签失败", { error: "add" }, 0);
-    }
+    return new ResModel("标签更新成功", {}, 1);
   }
 }
 

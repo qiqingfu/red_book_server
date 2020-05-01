@@ -123,6 +123,7 @@ class TagServices {
 
     // 客户端最新标签数据
     const realTagIds = batchDecodeId(ids);
+    let successResponse = null;
 
     /**
      * 三种操作
@@ -151,7 +152,7 @@ class TagServices {
       /**
        * 存储用户的标签数据
        */
-      const saveResult = await TagModel.saveTagById(realTagIds, uuid);
+      const saveResult = await TagModel.updateTagById(realTagIds, uuid, "add");
       if (!saveResult.errno) {
         return saveResult;
       }
@@ -183,14 +184,23 @@ class TagServices {
      */
     try {
       if (deleteTagList.length) {
-        const deleteTagResult = await TagModel.deleteTags(deleteTagList, uuid);
+        const deleteTagResult = await TagModel.updateTagById(
+          deleteTagList,
+          uuid,
+          "delete"
+        );
         if (deleteTagResult.errno) {
           return deleteTagResult;
         }
       }
 
       if (addTagList.length) {
-        const addTagResult = await TagModel.addTags(addTagList, uuid);
+        const addTagResult = await TagModel.updateTagById(
+          addTagList,
+          uuid,
+          "add"
+        );
+        successResponse = addTagResult;
         if (addTagResult.errno) {
           return addTagResult;
         }
@@ -200,7 +210,7 @@ class TagServices {
       return new ResModel("系统错误");
     }
 
-    return new ResModel("更新标签成功", 1);
+    return successResponse;
   }
 
   /**
