@@ -47,12 +47,22 @@ class TagModel {
    * @returns ResModel
    */
   static async findTagById(uuid) {
+    debug("uuid =>", uuid);
     let findResult;
     try {
       findResult = await User.findOne({
         where: { uuid },
+        /**
+         * 使用左联接急切加载关联列表
+         */
         include: {
+          /**
+           * 想要加载的模型
+           */
           model: Tag,
+          through: {
+            attributes: [""],
+          },
         },
       });
 
